@@ -1,0 +1,17 @@
+### AL ###
+#Template for ego projects for Dynamics 365 Business Central
+vendor
+.DS_Store/
+.vscode/
+.idea/
+logs/
+*.json
+*.xlsx
+*.toml
+dist/
+log/
+staticFiles/
+test/
+.DS_Store
+*.mod
+*.sum
