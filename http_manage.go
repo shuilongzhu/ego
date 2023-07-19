@@ -4,14 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"strings"
 )
-
-var ClientIp = GetClientIp() //获取本机真正IP
 
 // CommonPostCall @description:公共post请求调用
 // @parameter auth
@@ -35,7 +32,6 @@ func CommonPostCall(auth string, uri string, reqObject interface{}, respObject i
 	//设置post请求,第三个参数传byte类型,很关键！
 	req, err := http.NewRequest(http.MethodPost, uri, bytes.NewBuffer(jsonData))
 	if err != nil {
-		log.Println(err)
 		return
 	}
 	//设置请求数据格式
@@ -48,17 +44,14 @@ func CommonPostCall(auth string, uri string, reqObject interface{}, respObject i
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Errorln(err)
 		return
 	}
 	defer resp.Body.Close()
 	//读取返回值
 	res, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Errorln(err)
 		return
 	}
-	log.Println(string(res))
 	return JsonStrToStruct(string(res), &respObject)
 }
 
@@ -73,7 +66,6 @@ func CommonGetCall(auth string, uri string, respObject interface{}) (err error) 
 	//设置get请求,第三个参数传byte类型,很关键！
 	req, err := http.NewRequest(http.MethodGet, uri, bytes.NewBuffer(jsonData))
 	if err != nil {
-		log.Println(err)
 		return
 	}
 	//设置请求数据格式
@@ -86,14 +78,12 @@ func CommonGetCall(auth string, uri string, respObject interface{}) (err error) 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Errorln(err)
 		return
 	}
 	defer resp.Body.Close()
 	//读取返回值
 	res, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Errorln(err)
 		return
 	}
 	return JsonStrToStruct(string(res), &respObject)
@@ -124,7 +114,6 @@ func GetClientIp() string {
 			}
 		}
 	}
-	log.Println("service ip is ", str)
 	return str
 }
 

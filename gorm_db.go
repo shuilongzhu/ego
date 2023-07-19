@@ -5,7 +5,7 @@ import (
 )
 
 type DbMethod interface {
-	CommonSelect(result interface{}, field Field) error
+	CommonSelect(result interface{}, field Field, args ...interface{}) error
 }
 
 var (
@@ -17,19 +17,22 @@ var (
 // @parameter result
 // @parameter field
 // @return error
-func (gorm *Gorm) CommonSelect(result interface{}, field Field) error {
+func (gorm *Gorm) CommonSelect(result interface{}, field Field, args ...interface{}) error {
 
-	if "" == field.TableName || "" == field.Pluck {
+	if "" == field.TableName {
 		return MethodParamErr
 	}
 
+	if "" == field.Pluck {
+		field.Pluck = "*"
+	}
 	operate := gorm.Db.Table(field.TableName).Select(field.Pluck)
 	if "" != field.Joins {
 		operate = operate.Joins(field.Joins)
 	}
 
 	//条件拼接
-	operate = operate.Where(field.Where, field.Args...)
+	operate = operate.Where(field.Where, args...)
 
 	if "" != field.Group {
 		operate = operate.Group(field.Group)
