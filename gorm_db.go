@@ -6,6 +6,7 @@ import (
 
 type DbMethod interface {
 	CommonSelect(result interface{}, field Field, args ...interface{}) error
+	CommonDelete(tableName string, args ...interface{}) error
 }
 
 var (
@@ -49,4 +50,8 @@ func (gorm *Gorm) CommonSelect(result interface{}, field Field, args ...interfac
 
 	operate = operate.Scan(result)
 	return operate.Error
+}
+
+func (gorm *Gorm) CommonDelete(tableName string, args ...interface{}) error {
+	return nil
 }
