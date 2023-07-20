@@ -1,6 +1,9 @@
 package ego
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+	"net/http"
+)
 
 type Field struct {
 	TableName string `json:"table_name"` //表名称
@@ -14,5 +17,20 @@ type Field struct {
 }
 
 type Gorm struct {
-	Db *gorm.DB
+	Db       *gorm.DB `json:"db"`
+	Ip       string   `json:"ip"`
+	DataBase string   `json:"dataBase"`
+}
+
+// DfsHTTPClient
+// @Description: seaweedfs分布式存储相关的配置信息结构体
+type DfsHTTPClient struct {
+	DfsMasterAddress string       `json:"dfs_master_address"`
+	DfsFilerAddress  string       `json:"dfs_filer_address"`
+	Client           *http.Client `json:"client"`
+}
+
+type ZipFile struct {
+	FilePath string `json:"file_path"`
+	FileName string `json:"file_name"`
 }

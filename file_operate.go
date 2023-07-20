@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
+	"mime/multipart"
 	"os"
 )
 
@@ -103,5 +104,34 @@ func Base64DecodeString(base64Str string) (byteList []byte) {
 		log.Error("base64 decode error:", err)
 		return
 	}
+	return
+}
+
+// FileToByte @description:multipart.FileHeader file to []byte
+// @parameter fileHeader
+// @return err
+// @return bytes
+func FileToByte(fileHeader multipart.FileHeader) (err error, bytes []byte) {
+	file, err := fileHeader.Open()
+	if nil != err {
+		return
+	}
+
+	bytes, err = ioutil.ReadAll(file)
+	return
+}
+
+// OpenLocalFileToByte @description: read local file to []byte
+// @parameter filePath
+// @return err
+// @return bytes
+func OpenLocalFileToByte(filePath string) (err error, bytes []byte) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	bytes, err = ioutil.ReadAll(file)
 	return
 }
